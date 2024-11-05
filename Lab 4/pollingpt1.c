@@ -24,7 +24,7 @@
 #define LED_OFF					FALSE
 
 
-int ReadButton1Status( void );
+int ReadButton2Status( void );
 
 /**********************************************************/
 int polling(void)
@@ -53,7 +53,7 @@ int polling(void)
 
         while (1)
         {
-                 if( BUTTON_PUSHED == ReadButton1Status() )
+                 if( BUTTON_PUSHED == ReadButton2Status() )
                 {
                                 GPIO_SetBits(GPIOA, GPIO_Pin_0);
                 }
@@ -67,7 +67,7 @@ int polling(void)
 }
 
 /**********************************************************/
-int ReadButton1Status( void )
+int ReadButton2Status( void )
 {
         if(GPIOA->IDR & GPIO_Pin_5 )
         {
