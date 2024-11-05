@@ -36,12 +36,12 @@ int polling(void)
         RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
         //configure the PA0 (corresponding to LED) as the output pin
-        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;                                //Enable the ouput to GPIO pin 0
         GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
         GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
         GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
         GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-        GPIO_Init(GPIOA, &GPIO_InitStructure);
+        GPIO_Init(GPIOA, &GPIO_InitStructure);                                    //Enable the output to GPIO pin A (0)
 
         //configure PA5 (corresponding to btn 2) as the input pin
         GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
