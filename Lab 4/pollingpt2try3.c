@@ -51,16 +51,16 @@ int polling(void)
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    int b1 = 0;  // Counter for Button 1 presses
-    int b2 = 0;  // Counter for Button 2 presses
-    int led = 0; // LED state: 0 for OFF, 1 for ON
+    int b1 = 0;
+    int b2 = 0;
+    int led = 0;
 
     while (1)
     {
         if (ReadButton1Status() == BUTTON_PUSHED)
         {
             b1++;
-            while (ReadButton1Status() == BUTTON_PUSHED); // Debounce
+            while (ReadButton1Status() == BUTTON_PUSHED);
         }
 
         if (b1 == 1)
@@ -68,34 +68,34 @@ int polling(void)
             if (ReadButton2Status() == BUTTON_PUSHED)
             {
                 b2++;
-                while (ReadButton2Status() == BUTTON_PUSHED); // Debounce
+                while (ReadButton2Status() == BUTTON_PUSHED);
             }
-
-            // Check if the sequence "Button 1, Button 2, Button 2" is completed
             if (b2 == 2)
             {
                 if (led == 0)
                 {
-                    GPIO_SetBits(GPIOA, GPIO_Pin_0); // Turn LED ON
+                    GPIO_SetBits(GPIOA, GPIO_Pin_0);
                     led = 1;
                 }
                 else
                 {
-                    GPIO_ResetBits(GPIOA, GPIO_Pin_0); // Turn LED OFF
+                    GPIO_ResetBits(GPIOA, GPIO_Pin_0);
                     led = 0;
                 }
 
-                // Reset counters after the correct sequence
                 b1 = 0;
                 b2 = 0;
             }
         }
-
-        // Reset if additional presses are detected beyond the sequence
-        if (b1 > 1 || b2 > 2)
+        if (b1 > 1)
         {
-            b1 = 0;
+            b1 = 1;
             b2 = 0;
+        }
+        if (b2 > 2)
+        {
+                    b1 = 0;
+                    b2 = 0;
         }
     }
 
