@@ -61,9 +61,11 @@ int polling(void)
 
         int b1 = 0;
         int b2 = 0;
+        int led = 0;
 
         while (1)
         {
+        if(led == 0){
                 if(ReadButton1Status() == BUTTON_PUSHED )
                 {
                 	b1++;
@@ -78,18 +80,71 @@ int polling(void)
                 	if(b2 == 2)
                 	{
                 		GPIO_SetBits(GPIOA, GPIO_Pin_0);
+                		led = 1;
                 	}
                 	if(b2 > 2)
                 	{
+                		GPIO_ResetBits(GPIOA, GPIO_Pin_0);
+                		led = 0;
                 		b1 = 0;
                 		b2 = 0;
                 	}
                 }
-                if(b1 > 1 || b2 > 2)
+                if(b1 > 1)
                 {
                 	GPIO_ResetBits(GPIOA, GPIO_Pin_0);
-                	b1 = 0;
+                	led = 0;
+                	b1 = 1;
+                	b2 = 0;
                 }
+                if(b2 > 2)
+                {
+                	GPIO_ResetBits(GPIOA, GPIO_Pin_0);
+                	led = 0;
+                    b1 = 0;
+                    b2 = 0;
+                }
+        }
+        if (led == 1){
+            if(ReadButton1Status() == BUTTON_PUSHED )
+            {
+            	b1++;
+            }
+            if(b1 == 1)
+            {
+            	if(ReadButton2Status() == BUTTON_PUSHED )
+            	{
+            		b2++;
+            		while(ReadButton2Status() == BUTTON_PUSHED);
+            	}
+            	if(b2 == 2)
+            	{
+            		GPIO_ResetBits(GPIOA, GPIO_Pin_0);
+            		led = 0;
+            	}
+            	if(b2 > 2)
+            	{
+            		GPIO_SetBits(GPIOA, GPIO_Pin_0);
+            		led = 1;
+            		b1 = 0;
+            		b2 = 0;
+            	}
+            }
+            if(b1 > 1)
+            {
+            	GPIO_SetBits(GPIOA, GPIO_Pin_0);
+            	led = 1;
+            	b1 = 1;
+            	b2 = 0;
+            }
+            if(b2 > 2)
+            {
+            	GPIO_SetBits(GPIOA, GPIO_Pin_0);
+            	led = 1;
+                b1 = 0;
+                b2 = 0;
+            }
+        }
         }
 
         return 0;
